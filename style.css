@@ -5,9 +5,6 @@ body {
   font: 100%/1.5 system-ui;
 }
 img {
-    /* Make images responsive by setting their maximum 
-    width to 100% of their container and allowing the 
-    height to adjust automatically */
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
