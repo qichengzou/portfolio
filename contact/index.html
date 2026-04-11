@@ -1,39 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Contact</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../style.css">
+  <title>Contact</title>
 </head>
-<body> 
-    <nav>
-        <a href="../index.html"  class="current">Home</a>
-        <a href="../projects/index.html"  class="current">Projects</a>
-        <a href="index.html"  class="current">Contact</a>
-        <a href="../cv/index.html"  class="current">CV</a>
-    </nav>  
-    <h1>Contact</h1>
-    <form   action="mailto:q2zou@ucsd.edu"
-            method="POST"
-            enctype="text/plain">
-    
-        <label>
-            Email:
-            <input name="email" type="email"></input>
-        </label>
-        <br>
-        <label>
-            Subject:
-            <input name="subject"></input>
-        </label>
-        <br>
-        <label>
-            Body:
-            <textarea name="body"></textarea>
-        </label>
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../projects/index.html">Projects</a>
+    <a href="index.html" class="current">Contact</a>
+    <a href="../cv/index.html">CV</a>
+  </nav>
 
-        <button>Submit</button>
-    </form>
+  <h1>Contact</h1>
+
+  <form action="mailto:q2zou@ucsd.edu" method="POST" enctype="text/plain">
+    <label>
+      Email:
+      <input name="email" type="email">
+    </label>
+
+    <label>
+      Subject:
+      <input name="subject">
+    </label>
+
+    <label>
+      Body:
+      <textarea name="body"></textarea>
+    </label>
+
+    <button>Submit</button>
+  </form>
 </body>
 </html>
