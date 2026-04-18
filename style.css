@@ -1,6 +1,7 @@
 html {
   --color-accent: oklch(65% 50% 0);
   accent-color: var(--color-accent);
+  color-scheme: light dark;
 }
 body {
   /* Set line height to 1.5 times the font size
@@ -11,10 +12,12 @@ body {
   margin-inline: auto;
   padding: 1rem;
 }
+
 nav {
   display: flex;
   margin-bottom: 1rem;
-  border-bottom: 1px solid oklch(80% 3% 200);
+  --border-color: oklch(50% 10% 200 / 40%);
+  border-bottom: 1px solid var(--border-color);
 }
 nav a {
   flex: 1;
@@ -25,12 +28,13 @@ nav a {
 }
 nav a.current {
   border-bottom: 0.4em solid oklch(80% 3% 200);
+  border-bottom-color: var(--border-color);
   padding-bottom: 0.1em;
 }
 nav a:hover {
   border-bottom: 0.4em solid var(--color-accent);
   padding-bottom: 0.1em;
-  background-color: oklch(from var(--color-accent) 95% 5% h);
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
 }
 img {
   max-width: 100%;
@@ -59,17 +63,18 @@ form button {
 }
 
 button {
+  color: canvastext;
   padding: 0.6em 1em;
   border: 1px solid oklch(80% 3% 200);
   border-radius: 0.4em;
-  background-color: white;
+  background-color: canvas;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 button:hover {
   border-color: var(--color-accent);
-  background-color: oklch(from var(--color-accent) 95% 5% h);
+  background-color: color-mix(in oklch, var(--color-accent), canvas 85%);
 }
 
 input,
@@ -161,4 +166,15 @@ body > header p {
 
 body > header a {
   color: inherit;
+}
+
+.color-scheme {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 80%;
+}
+
+select {
+  font: inherit;
 }
