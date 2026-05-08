@@ -82,6 +82,13 @@ function renderScatterPlot(data, commits) {
 
     const yScale = d3.scaleLinear().domain([0, 24]).range([height, 0]);
 
+    const [minLines, maxLines] = d3.extent(commits, (d) => d.totalLines);
+
+    const rScale = d3
+    .scaleSqrt()
+    .domain([minLines, maxLines])
+    .range([2, 30]);
+
     const dots = svg.append('g').attr('class', 'dots');
 
     const margin = { top: 10, right: 10, bottom: 30, left: 20 };
@@ -125,14 +132,55 @@ function renderScatterPlot(data, commits) {
     .attr('transform', `translate(${usableArea.left}, 0)`)
     .call(yAxis);
 
+    const sortedCommits = d3.sort(commits, (d) => -d.totalLines);
+
     dots
     .selectAll('circle')
-    .data(commits)
+    .data(sortedCommits)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
-    .attr('r', 5)
-    .attr('fill', 'steelblue');
+    .attr('r', (d) => rScale(d.totalLines))
+    .attr('fill', 'steelblue')
+    .style('fill-opacity', 0.7)
+    .on('mouseenter', (event, commit) => {
+    renderTooltipContent(commit);
+    updateTooltipVisibility(true);
+    updateTooltipPosition(event);
+    })
+
+    .on('mouseleave', () => {
+    updateTooltipVisibility(false);
+    });
+}
+
+function updateTooltipVisibility(isVisible) {
+  const tooltip = document.getElementById('commit-tooltip');
+  tooltip.hidden = !isVisible;
+}
+
+function updateTooltipPosition(event) {
+  const tooltip = document.getElementById('commit-tooltip');
+
+  tooltip.style.left = `${event.clientX + 10}px`;
+  tooltip.style.top = `${event.clientY + 10}px`;
+}
+
+function renderTooltipContent(commit) {
+  document.getElementById('commit-link').href = commit.url;
+  document.getElementById('commit-link').textContent = commit.id;
+
+  document.getElementById('commit-date').textContent =
+    commit.datetime.toLocaleDateString();
+
+  document.getElementById('commit-time').textContent =
+    commit.datetime.toLocaleTimeString();
+
+  document.getElementById('commit-author').textContent =
+    commit.author;
+
+  document.getElementById('commit-lines').textContent =
+    commit.totalLines;
 }
 
 let data = await loadData();
@@ -141,7 +189,3 @@ let commits = processCommits(data);
 renderCommitInfo(data, commits);
 
 renderScatterPlot(data, commits);
-
-console.log(data.length);
-console.log(commits.length);
-console.log(commits);
