@@ -18,16 +18,16 @@
         "description": "A full-stack web app built with Next.js and React that helps students discover, bookmark, and track ongoing and upcoming university classes, with dynamic filtering by building and meeting days."
     },
     {
-        "title": "Perspiciatis voluptas officiis itaque.",
-        "year": "2024",
-        "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Explicabo doloremque totam omnis! Minus illum mollitia maiores! Non repudiandae molestiae sit commodi minus dolorem, veniam velit quidem cumque tempora consequatur voluptatum rem id, dolore ipsam optio. Consequatur, ducimus veniam!"
+        "title": "Biking in Boston",
+        "year": "2026",
+        "image": "images/biking.png",
+        "description":  "An interactive Mapbox and D3 visualization of bike lanes, BlueBike stations, and bike traffic patterns in the Boston area."
     },
     {
         "title": "Commodi molestias accusamus reprehenderit.",
         "year": "2026",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "Unde eveniet explicabo dolorem minima labore, pariatur temporibus quibusdam iusto ut dolore sunt. Ad veniam omnis cupiditate mollitia accusantium cumque distinctio atque eligendi nesciunt voluptatibus. Ipsum a in quae modi."
+        "description": "Est numquam odit unde qui alias odio ab nam a iusto quas quae, inventore delectus vero, quia officia. Quibusdam repellat odit laborum assumenda qui itaque quis quas perspiciatis accusantium excepturi."
     },
     {
         "title": "Quod deleniti possimus voluptatum.",
