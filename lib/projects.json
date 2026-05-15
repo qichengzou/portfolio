@@ -3,7 +3,8 @@
         "title": "Early Game Advantage and Match Duration in Professional League of Legends",
         "year": "2026",
         "image": "https://vis-society.github.io/labs/2/images/empty.svg",
-        "description": "A DSC 80 final project analyzing professional League of Legends data from Oracle's Elixir to study whether early-game statistics at 15 minutes can predict match duration."
+        "description": "A DSC 80 final project analyzing professional League of Legends data from Oracle's Elixir to study whether early-game statistics at 15 minutes can predict match duration.",
+        "url": "https://qichengzou.github.io/Early-Game-Advantage-and-Match-Duration-in-Professional-League-of-Legends/"
     },
     {
         "title": "U.S. Infant Mortality Racial Disparities Analysis",
@@ -21,7 +22,8 @@
         "title": "Biking in Boston",
         "year": "2026",
         "image": "images/biking.png",
-        "description":  "An interactive Mapbox and D3 visualization of bike lanes, BlueBike stations, and bike traffic patterns in the Boston area."
+        "description": "An interactive Mapbox and D3 visualization of bike lanes, BlueBike stations, and bike traffic patterns in the Boston area.",
+        "url": "https://qichengzou.github.io/Biking_in_Boston/"
     },
     {
         "title": "Commodi molestias accusamus reprehenderit.",

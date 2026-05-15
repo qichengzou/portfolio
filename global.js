@@ -91,6 +91,21 @@ export async function fetchJSON(url) {
   }
 }
 
+function projectImageSrc(image) {
+  return /^https?:\/\//.test(image) ? image : BASE_PATH + image;
+}
+
+function projectTime(project) {
+  if (project.date) return new Date(project.date).getTime();
+  return new Date(Number(project.year), 0, 1).getTime();
+}
+
+export function getLatestProjects(projects, count = 3) {
+  return [...projects]
+    .sort((a, b) => projectTime(b) - projectTime(a))
+    .slice(0, count);
+}
+
 export function renderProjects(projects, containerElement, headingLevel = 'h2') {
   if (!containerElement) {
     console.error('Container not found');
@@ -101,11 +116,15 @@ export function renderProjects(projects, containerElement, headingLevel = 'h2') 
 
   projects.forEach(project => {
     const article = document.createElement('article');
+    const projectLink = project.url
+      ? `<p><a class="project-link" href="${project.url}" target="_blank" rel="noopener noreferrer">View project</a></p>`
+      : '';
 
     article.innerHTML = `
       <h3>${project.title}</h3>
-      <img src="${project.image}" alt="" />
+      <img src="${projectImageSrc(project.image)}" alt="" />
       <p>${project.description}</p>
+      ${projectLink}
       <p class="project-year">${project.year}</p>
     `;
 

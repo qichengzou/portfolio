@@ -1,8 +1,8 @@
-import { fetchJSON, renderProjects } from './global.js';
+import { fetchJSON, getLatestProjects, renderProjects } from './global.js';
 
 const projects = await fetchJSON('./lib/projects.json');
 
-const latest = projects.slice(0, 3);
+const latest = getLatestProjects(projects, 3);
 
 const container = document.querySelector('.projects');
 
