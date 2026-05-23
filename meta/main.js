@@ -364,14 +364,24 @@ function renderLanguageBreakdown(selection) {
 
   container.innerHTML = '';
 
+  // Create grouped items so they can be laid out side-by-side
   for (const [language, count] of breakdown) {
     const proportion = count / lines.length;
     const formatted = d3.format('.1~%')(proportion);
 
-    container.innerHTML += `
-      <dt>${language}</dt>
-      <dd>${count} lines (${formatted})</dd>
-    `;
+    const item = document.createElement('div');
+    item.className = 'language-item';
+
+    const dt = document.createElement('dt');
+    dt.textContent = language;
+
+    const dd = document.createElement('dd');
+    dd.textContent = `${count} lines (${formatted})`;
+
+    item.appendChild(dt);
+    item.appendChild(dd);
+
+    container.appendChild(item);
   }
 }
 
