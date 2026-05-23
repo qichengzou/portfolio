@@ -511,14 +511,14 @@ steps.html(
       } files.
     </p>
 
-    <p class="files-label">Files so far</p>
     <dl class="files-mini"></dl>
   `
  );
 
 steps.each(function(commit) {
   const commitsSoFar = commits.filter((d) => d.datetime <= commit.datetime);
-  updateFileDisplay(commitsSoFar, d3.select(this).select('.files-mini'));
+  // Commented out to disable mini file lists
+  // updateFileDisplay(commitsSoFar, d3.select(this).select('.files-mini'));
 });
 
 const scroller = scrollama();

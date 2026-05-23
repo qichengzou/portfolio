@@ -449,7 +449,7 @@ circle.selected {
 #scrolly-1 {
   position: relative;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 #scrolly-1 > * {
@@ -470,8 +470,14 @@ circle.selected {
 
 .step,
 .file-step {
-  min-height: 45vh;
-  padding-block: 0.5rem;
+  /* min-height: 45vh; */
+  padding-block: 0.08rem;
+  line-height: 1.15;
+  margin-block: 0.25rem;
+}
+
+.step p {
+  margin: 0 0 0.25rem 0;
 }
 
 .files-mini,
@@ -512,14 +518,14 @@ circle.selected {
 .step h3 {
   font-size: 1rem;
   font-weight: 600;
-  margin-block-start: 0.5em;
-  margin-block-end: 0.25em;
+  margin-block-start: 0.25em;
+  margin-block-end: 0.15em;
 }
 
 .files-label {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0.75rem 0 0.25rem;
+  margin: 0.4rem 0 0.15rem;
 }
 
 /* Reduce font sizes for selection info and language breakdown in the scatter plot */
