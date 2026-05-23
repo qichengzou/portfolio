@@ -280,6 +280,33 @@ function updateFileDisplay(commits, selector = '#files') {
     .attr('style', (d) => `--color: ${colors(d.type)}`);
 }
 
+function updateFileRaceDisplay(commits) {
+  const container = d3.select('#files');
+  const oldPositions = new Map();
+
+  container.selectAll(':scope > div').each(function(d) {
+    oldPositions.set(d.name, this.getBoundingClientRect().top);
+  });
+
+  updateFileDisplay(commits, '#files');
+
+  container.selectAll(':scope > div').each(function(d) {
+    const oldTop = oldPositions.get(d.name);
+    const newTop = this.getBoundingClientRect().top;
+
+    if (oldTop !== undefined) {
+      const dy = oldTop - newTop;
+
+      d3.select(this)
+        .style('transform', `translateY(${dy}px)`)
+        .transition()
+        .duration(700)
+        .ease(d3.easeCubicInOut)
+        .style('transform', 'translateY(0)');
+    }
+  });
+}
+
 function updateTooltipVisibility(isVisible) {
   const tooltip = document.getElementById('commit-tooltip');
   tooltip.hidden = !isVisible;
@@ -513,7 +540,7 @@ fileSlider.addEventListener('input', () => {
     (d) => d.datetime <= fileMaxTime
   );
 
-  updateFileDisplay(fileCommits, '#files');
+  updateFileDisplay(fileCommits);
 
   document.getElementById('file-time-display').textContent =
     fileMaxTime.toLocaleString('en', {

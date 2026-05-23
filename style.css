@@ -468,8 +468,10 @@ circle.selected {
   height: 50vh;
 }
 
-.step {
-  padding-bottom: 80vh;
+.step,
+.file-step {
+  min-height: 45vh;
+  padding-block: 0.5rem;
 }
 
 .files-mini,
@@ -555,4 +557,8 @@ circle.selected {
 .language-item dd {
   font-size: 0.95rem;
   margin: 0;
+}
+
+#files > div {
+  will-change: transform;
 }
