@@ -484,9 +484,10 @@ steps.html(
       } files.
     </p>
 
+    <p class="files-label">Files so far</p>
     <dl class="files-mini"></dl>
   `
-);
+ );
 
 steps.each(function(commit) {
   const commitsSoFar = commits.filter((d) => d.datetime <= commit.datetime);
@@ -494,7 +495,6 @@ steps.each(function(commit) {
 });
 
 const scroller = scrollama();
-
 scroller
   .setup({
     container: '#scrolly-1',

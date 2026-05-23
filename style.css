@@ -514,6 +514,12 @@ circle.selected {
   margin-block-end: 0.25em;
 }
 
+.files-label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.25rem;
+}
+
 /* Reduce font sizes for selection info and language breakdown in the scatter plot */
 #scatter-plot #selection-count {
   font-size: 0.95rem;
