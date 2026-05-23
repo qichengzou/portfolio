@@ -1,4 +1,5 @@
 import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
+import scrollama from 'https://cdn.jsdelivr.net/npm/scrollama@3.2.0/+esm';
 
 async function loadData() {
   const data = await d3.csv('loc.csv', (row) => ({
@@ -39,7 +40,8 @@ function processCommits(data) {
       });
 
       return ret;
-    });
+    })
+    .sort((a, b) => a.datetime - b.datetime);
 }
 
 function renderCommitInfo(data, commits) {
@@ -422,3 +424,65 @@ const timeSlider = document.getElementById('commit-progress');
 timeSlider.addEventListener('input', onTimeSliderChange);
 
 onTimeSliderChange();
+
+
+
+function onStepEnter(response) {
+  const commit = response.element.__data__;
+
+  commitProgress = timeScale(commit.datetime);
+  commitMaxTime = commit.datetime;
+
+  filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
+
+  updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
+
+  document.getElementById('commit-progress').value = commitProgress;
+
+  document.getElementById('commit-time-display').textContent =
+    commitMaxTime.toLocaleString('en', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    });
+}
+
+d3.select('#scatter-story')
+  .selectAll('.step')
+  .data(commits)
+  .join('div')
+  .attr('class', 'step')
+  .html(
+    (d, i) => `
+      <p>
+        On ${d.datetime.toLocaleString('en', {
+          dateStyle: 'full',
+          timeStyle: 'short',
+        })},
+        I made
+        <a href="${d.url}" target="_blank">
+          ${i > 0 ? 'another commit' : 'my first commit'}
+        </a>.
+      </p>
+
+      <p>
+        I edited ${d.totalLines} lines across ${
+          d3.rollups(
+            d.lines,
+            (D) => D.length,
+            (d) => d.file
+          ).length
+        } files.
+      </p>
+    `
+  );
+
+const scroller = scrollama();
+
+scroller
+  .setup({
+    container: '#scrolly-1',
+    step: '#scrolly-1 .step',
+  })
+  .onStepEnter(onStepEnter);
+
