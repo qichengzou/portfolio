@@ -154,11 +154,12 @@ function renderScatterPlot(data, commits) {
 
     dots
     .selectAll('circle')
-    .data(sortedCommits)
+    .data(sortedCommits, (d) => d.id)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', (d) => rScale(d.totalLines))
+    .attr('style', (d) => `--r: ${rScale(d.totalLines)}`)
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
@@ -227,11 +228,12 @@ function updateScatterPlot(data, commits) {
 
   dots
     .selectAll('circle')
-    .data(sortedCommits)
+    .data(sortedCommits, (d) => d.id)
     .join('circle')
     .attr('cx', (d) => xScale(d.datetime))
     .attr('cy', (d) => yScale(d.hourFrac))
     .attr('r', (d) => rScale(d.totalLines))
+    .attr('style', (d) => `--r: ${rScale(d.totalLines)}`)
     .attr('fill', 'steelblue')
     .style('fill-opacity', 0.7)
     .on('mouseenter', (event, commit) => {
@@ -242,6 +244,39 @@ function updateScatterPlot(data, commits) {
     .on('mouseleave', () => {
       updateTooltipVisibility(false);
     });
+}
+
+function updateFileDisplay(commits) {
+  let lines = commits.flatMap((d) => d.lines);
+
+  let files = d3
+    .groups(lines, (d) => d.file)
+    .map(([name, lines]) => {
+      return { name, lines };
+    })
+    .sort((a, b) => b.lines.length - a.lines.length);
+
+  let filesContainer = d3
+    .select('#files')
+    .selectAll('div')
+    .data(files, (d) => d.name)
+    .join((enter) =>
+      enter.append('div').call((div) => {
+        div.append('dt').append('code');
+        div.append('dd');
+      })
+    );
+
+  filesContainer
+  .select('dt')
+  .html((d) => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
+  filesContainer
+  .select('dd')
+  .selectAll('div')
+  .data((d) => d.lines)
+  .join('div')
+  .attr('class', 'loc')
+  .attr('style', (d) => `--color: ${colors(d.type)}`);
 }
 
 function updateTooltipVisibility(isVisible) {
@@ -277,6 +312,7 @@ let xScale;
 let yScale;
 let commits;
 let filteredCommits;
+let colors = d3.scaleOrdinal(d3.schemeTableau10);
 
 function isCommitSelected(selection, commit) {
   if (!selection) {
@@ -358,6 +394,7 @@ function onTimeSliderChange() {
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
 
   updateScatterPlot(data, filteredCommits);
+  updateFileDisplay(filteredCommits);
 }
 
 let data = await loadData();
@@ -378,6 +415,7 @@ commitMaxTime = timeScale.invert(commitProgress);
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
+updateFileDisplay(filteredCommits);
 
 const timeSlider = document.getElementById('commit-progress');
 
