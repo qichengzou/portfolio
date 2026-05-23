@@ -248,19 +248,17 @@ function updateScatterPlot(data, commits) {
     });
 }
 
-function updateFileDisplay(commits) {
+function updateFileDisplay(commits, selector = '#files') {
   let lines = commits.flatMap((d) => d.lines);
 
   let files = d3
     .groups(lines, (d) => d.file)
-    .map(([name, lines]) => {
-      return { name, lines };
-    })
+    .map(([name, lines]) => ({ name, lines }))
     .sort((a, b) => b.lines.length - a.lines.length);
 
-  let filesContainer = d3
-    .select('#files')
-    .selectAll('div')
+  let target = typeof selector === 'string' ? d3.select(selector) : selector;
+
+  let filesContainer = target.selectAll('div')
     .data(files, (d) => d.name)
     .join((enter) =>
       enter.append('div').call((div) => {
@@ -270,15 +268,16 @@ function updateFileDisplay(commits) {
     );
 
   filesContainer
-  .select('dt')
-  .html((d) => `<code>${d.name}</code><small>${d.lines.length} lines</small>`);
+    .select('dt')
+    .html((d) => `<code>${d.name}</code> <small>${d.lines.length} lines</small>`);
+
   filesContainer
-  .select('dd')
-  .selectAll('div')
-  .data((d) => d.lines)
-  .join('div')
-  .attr('class', 'loc')
-  .attr('style', (d) => `--color: ${colors(d.type)}`);
+    .select('dd')
+    .selectAll('div')
+    .data((d) => d.lines)
+    .join('div')
+    .attr('class', 'loc')
+    .attr('style', (d) => `--color: ${colors(d.type)}`);
 }
 
 function updateTooltipVisibility(isVisible) {
@@ -396,7 +395,7 @@ function onTimeSliderChange() {
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
 
   updateScatterPlot(data, filteredCommits);
-  updateFileDisplay(filteredCommits);
+  updateFileDisplay(filteredCommits, '#files');
 }
 
 let data = await loadData();
@@ -417,7 +416,7 @@ commitMaxTime = timeScale.invert(commitProgress);
 
 renderCommitInfo(data, commits);
 renderScatterPlot(data, commits);
-updateFileDisplay(filteredCommits);
+updateFileDisplay(filteredCommits, '#files');
 
 const timeSlider = document.getElementById('commit-progress');
 
@@ -436,7 +435,6 @@ function onStepEnter(response) {
   filteredCommits = commits.filter((d) => d.datetime <= commitMaxTime);
 
   updateScatterPlot(data, filteredCommits);
-  updateFileDisplay(filteredCommits);
 
   document.getElementById('commit-progress').value = commitProgress;
 
@@ -447,35 +445,43 @@ function onStepEnter(response) {
     });
 }
 
-d3.select('#scatter-story')
+const steps = d3.select('#story-steps')
   .selectAll('.step')
   .data(commits)
   .join('div')
-  .attr('class', 'step')
-  .html(
-    (d, i) => `
-      <p>
-        On ${d.datetime.toLocaleString('en', {
-          dateStyle: 'full',
-          timeStyle: 'short',
-        })},
-        I made
-        <a href="${d.url}" target="_blank">
-          ${i > 0 ? 'another commit' : 'my first commit'}
-        </a>.
-      </p>
+  .attr('class', 'step');
 
-      <p>
-        I edited ${d.totalLines} lines across ${
-          d3.rollups(
-            d.lines,
-            (D) => D.length,
-            (d) => d.file
-          ).length
-        } files.
-      </p>
-    `
-  );
+steps.html(
+  (d, i) => `
+    <p>
+      On ${d.datetime.toLocaleString('en', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+      })},
+      I made
+      <a href="${d.url}" target="_blank">
+        ${i > 0 ? 'another commit' : 'my first commit'}
+      </a>.
+    </p>
+
+    <p>
+      I edited ${d.totalLines} lines across ${
+        d3.rollups(
+          d.lines,
+          (D) => D.length,
+          (d) => d.file
+        ).length
+      } files.
+    </p>
+
+    <dl class="files-mini"></dl>
+  `
+);
+
+steps.each(function(commit) {
+  const commitsSoFar = commits.filter((d) => d.datetime <= commit.datetime);
+  updateFileDisplay(commitsSoFar, d3.select(this).select('.files-mini'));
+});
 
 const scroller = scrollama();
 
@@ -485,4 +491,30 @@ scroller
     step: '#scrolly-1 .step',
   })
   .onStepEnter(onStepEnter);
+
+const fileSlider = document.getElementById('file-progress');
+
+fileSlider.addEventListener('input', () => {
+  const fileProgress = Number(fileSlider.value);
+
+  const fileMaxTime = timeScale.invert(fileProgress);
+
+  const fileCommits = commits.filter(
+    (d) => d.datetime <= fileMaxTime
+  );
+
+  updateFileDisplay(fileCommits, '#files');
+
+  document.getElementById('file-time-display').textContent =
+    fileMaxTime.toLocaleString('en', {
+      dateStyle: 'long',
+      timeStyle: 'short',
+    });
+});
+
+document.getElementById('file-time-display').textContent =
+  commitMaxTime.toLocaleString('en', {
+    dateStyle: 'long',
+    timeStyle: 'short',
+  });
 

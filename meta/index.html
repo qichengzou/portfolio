@@ -10,6 +10,7 @@
 </head>
 <body>
     <p>This page contains stats of codes in this website</p>
+
     <div class="time-filter">
         <label>
             Show commits until:
@@ -21,7 +22,9 @@
     <div id="stats"></div>
 
     <div id="scrolly-1">
-        <div id="scatter-story"></div>
+        <div id="scatter-story">
+            <div id="story-steps"></div>
+        </div>
 
         <div id="scatter-plot">
             <h2>Commits by time of day</h2>
@@ -29,7 +32,22 @@
             <div id="chart"></div>
 
             <dl id="commit-tooltip" class="info tooltip" hidden>
-                ...
+                <dt>Commit</dt>
+                <dd>
+                    <a href="" id="commit-link" target="_blank"></a>
+                </dd>
+
+                <dt>Date</dt>
+                <dd id="commit-date"></dd>
+
+                <dt>Time</dt>
+                <dd id="commit-time"></dd>
+
+                <dt>Author</dt>
+                <dd id="commit-author"></dd>
+
+                <dt>Lines Edited</dt>
+                <dd id="commit-lines"></dd>
             </dl>
 
             <p id="selection-count">No commits selected</p>
@@ -37,6 +55,18 @@
         </div>
     </div>
 
-    <dl id="files"></dl>
+    <section id="file-section">
+        <h2>File size race</h2>
+
+        <div class="time-filter">
+            <label>
+                Show files until:
+                <input type="range" id="file-progress" min="0" max="100" value="100">
+                <time id="file-time-display"></time>
+            </label>
+        </div>
+
+        <dl id="files"></dl>
+    </section>
 </body>
 </html>
